@@ -1,7 +1,9 @@
 
-from rest_framework import viewsets , generics
+from rest_framework import viewsets , generics 
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 from escola.models import Aluno, Curso , Matricula
-from escola.serializer import AlunoSerializer, CursoSerializer , MatriculaSerializer , ListaMatriculasAlunoSerializer
+from escola.serializer import AlunoSerializer, CursoSerializer , MatriculaSerializer , ListaMatriculasAlunoSerializer , ListaAlunosMatriculadosSerializer
 
 
 
@@ -29,4 +31,11 @@ class ListaMatriculasAluno(generics.ListAPIView):
         queryset = Matricula.objects.filter(aluno_id=self.kwargs['pk'])
         return queryset
     serializer_class = ListaMatriculasAlunoSerializer
+    
+class ListaAlunosMatriculados(generics.ListAPIView):
+    """ Listando alunos e alunas matriculados em um cruso"""
+    def get_queryset(self):
+        queryset = Matricula.objects.filter(curso_id =self.kwargs['pk'])
+        return queryset
+    serializer_class=ListaAlunosMatriculadosSerializer
     
